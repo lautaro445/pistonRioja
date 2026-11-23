@@ -1,313 +1,248 @@
 
--- =====================================================
--- PROYECTO: TALLER MECANICO PISTON RIOJANO
--- ARCHIVO: schema.sql
--- MOTOR: PostgreSQL
--- =====================================================
 
-BEGIN;
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
 
--- =====================================================
--- 1. ELIMINAR TABLAS ANTERIORES
--- Se eliminan primero las tablas dependientes.
--- =====================================================
 
-DROP TABLE IF EXISTS detalle_repuestos CASCADE;
-DROP TABLE IF EXISTS ordenes_trabajo CASCADE;
-DROP TABLE IF EXISTS autos CASCADE;
-DROP TABLE IF EXISTS motos CASCADE;
-DROP TABLE IF EXISTS vehiculos CASCADE;
-DROP TABLE IF EXISTS repuestos CASCADE;
-DROP TABLE IF EXISTS mecanicos CASCADE;
-DROP TABLE IF EXISTS clientes CASCADE;
+DROP SCHEMA IF EXISTS "PistonRiojano" CASCADE;
+CREATE SCHEMA "PistonRiojano";
 
--- =====================================================
--- 2. TABLA CLIENTES
--- =====================================================
 
-CREATE TABLE clientes (
-    dni VARCHAR(15) PRIMARY KEY,
-    nombre VARCHAR(60) NOT NULL,
-    apellido VARCHAR(60) NOT NULL,
-    telefono VARCHAR(30) NOT NULL,
-    email VARCHAR(100)
+ALTER SCHEMA "PistonRiojano" OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+
+
+CREATE TABLE "PistonRiojano"."Vehiculos" (
+    patente character varying(7) NOT NULL,
+    marca character varying(30) NOT NULL,
+    modelo character varying(30) NOT NULL,
+    "año" integer NOT NULL,
+    clientes_dni integer NOT NULL
 );
 
--- =====================================================
--- 3. TABLA VEHICULOS
--- Contiene los atributos comunes de Auto y Moto.
--- =====================================================
 
-CREATE TABLE vehiculos (
-    patente VARCHAR(15) PRIMARY KEY,
-    marca VARCHAR(50) NOT NULL,
-    modelo VARCHAR(50) NOT NULL,
-    anio INTEGER NOT NULL,
-    dni_cliente VARCHAR(15) NOT NULL,
-    tipo_vehiculo VARCHAR(10) NOT NULL,
+ALTER TABLE "PistonRiojano"."Vehiculos" OWNER TO postgres;
 
-    CONSTRAINT fk_vehiculo_cliente
-        FOREIGN KEY (dni_cliente)
-        REFERENCES clientes(dni)
-        ON DELETE RESTRICT,
 
-    CONSTRAINT chk_anio
-        CHECK (anio BETWEEN 1886 AND 2100),
 
-    CONSTRAINT chk_tipo_vehiculo
-        CHECK (tipo_vehiculo IN ('AUTO', 'MOTO'))
+CREATE TABLE "PistonRiojano"."Autos" (
+    NOT NULL patente,
+    cantidad_puertas integer NOT NULL,
+    combustible character varying(6) NOT NULL,
+    CONSTRAINT ck_combustible CHECK (((combustible)::text = ANY ((ARRAY['NAFTA'::character varying, 'DIESEL'::character varying, 'GNC'::character varying])::text[])))
+)
+INHERITS ("PistonRiojano"."Vehiculos");
+
+
+ALTER TABLE "PistonRiojano"."Autos" OWNER TO postgres;
+
+
+
+CREATE TABLE "PistonRiojano"."Clientes" (
+    dni integer NOT NULL,
+    nombre character varying(20) NOT NULL,
+    apellido character varying(20) NOT NULL,
+    telefono numeric(10,0) NOT NULL,
+    email character varying(30) NOT NULL
 );
 
--- =====================================================
--- 4. TABLA AUTOS
--- Contiene los atributos particulares de los autos.
--- =====================================================
 
-CREATE TABLE autos (
-    patente VARCHAR(15) PRIMARY KEY,
-    cantidad_puertas INTEGER NOT NULL,
-    tipo_combustible VARCHAR(10) NOT NULL,
+ALTER TABLE "PistonRiojano"."Clientes" OWNER TO postgres;
 
-    CONSTRAINT fk_auto_vehiculo
-        FOREIGN KEY (patente)
-        REFERENCES vehiculos(patente)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
 
-    CONSTRAINT chk_puertas
-        CHECK (cantidad_puertas BETWEEN 2 AND 6),
 
-    CONSTRAINT chk_combustible
-        CHECK (tipo_combustible IN ('NAFTA', 'DIESEL', 'GNC'))
+CREATE TABLE "PistonRiojano"."DetallesRespuestos" (
+    codigo_repuesto character varying(10) NOT NULL,
+    num_orden integer NOT NULL,
+    precio_vigente numeric(12,2) NOT NULL
 );
 
--- =====================================================
--- 5. TABLA MOTOS
--- Contiene los atributos particulares de las motos.
--- =====================================================
 
-CREATE TABLE motos (
-    patente VARCHAR(15) PRIMARY KEY,
-    cilindrada INTEGER NOT NULL,
+ALTER TABLE "PistonRiojano"."DetallesRespuestos" OWNER TO postgres;
 
-    CONSTRAINT fk_moto_vehiculo
-        FOREIGN KEY (patente)
-        REFERENCES vehiculos(patente)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
 
-    CONSTRAINT chk_cilindrada
-        CHECK (cilindrada > 0)
+
+CREATE TABLE "PistonRiojano"."Mecanicos" (
+    legajo integer CONSTRAINT "Mecánicos _legajo_not_null" NOT NULL,
+    nombre character varying(20) CONSTRAINT "Mecánicos _nombre_not_null" NOT NULL,
+    apellidos character varying(20) CONSTRAINT "Mecánicos _apellidos_not_null" NOT NULL,
+    especialidad character varying(12) CONSTRAINT "Mecánicos _especialidad_not_null" NOT NULL,
+    valor_hora integer CONSTRAINT "Mecánicos _valor_hora_not_null" NOT NULL
 );
 
--- =====================================================
--- 6. TABLA MECANICOS
--- =====================================================
 
-CREATE TABLE mecanicos (
-    legajo INTEGER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
-    nombre VARCHAR(60) NOT NULL,
-    apellido VARCHAR(60) NOT NULL,
-    especialidad VARCHAR(20) NOT NULL,
-    valor_hora NUMERIC(12,2) NOT NULL,
+ALTER TABLE "PistonRiojano"."Mecanicos" OWNER TO postgres;
 
-    CONSTRAINT chk_especialidad
-        CHECK (
-            especialidad IN (
-                'MOTOR',
-                'ELECTRICIDAD',
-                'FRENOS',
-                'GENERAL'
-            )
-        ),
 
-    CONSTRAINT chk_valor_hora
-        CHECK (valor_hora >= 0)
+CREATE TABLE "PistonRiojano"."Motos" (
+    NOT NULL patente,
+    cilindrada integer NOT NULL
+)
+INHERITS ("PistonRiojano"."Vehiculos");
+
+
+ALTER TABLE "PistonRiojano"."Motos" OWNER TO postgres;
+
+
+
+CREATE TABLE "PistonRiojano"."Ordenes" (
+    numero integer NOT NULL,
+    fecha_ingreso date NOT NULL,
+    descripcion_problema character varying(300) NOT NULL,
+    responsable integer NOT NULL,
+    estado_actual character varying(13) NOT NULL,
+    patente_vehiculo character varying(7) NOT NULL,
+    CONSTRAINT ck_estado CHECK (((estado_actual)::text = ANY ((ARRAY['PENDIENTE'::character varying, 'EN REPARACION'::character varying, 'FINALIZADA'::character varying, 'ENTREGADA'::character varying])::text[])))
 );
 
--- =====================================================
--- 7. TABLA REPUESTOS
--- =====================================================
 
-CREATE TABLE repuestos (
-    codigo VARCHAR(20) PRIMARY KEY,
-    descripcion VARCHAR(120) NOT NULL,
-    precio_unitario NUMERIC(12,2) NOT NULL,
-    stock INTEGER NOT NULL DEFAULT 0,
+ALTER TABLE "PistonRiojano"."Ordenes" OWNER TO postgres;
 
-    CONSTRAINT chk_precio
-        CHECK (precio_unitario >= 0),
 
-    CONSTRAINT chk_stock
-        CHECK (stock >= 0)
+
+CREATE TABLE "PistonRiojano"."Repuestos" (
+    codigo character varying(10) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    precio_unitario numeric(12,2) NOT NULL,
+    stock_disponible integer NOT NULL
 );
 
--- =====================================================
--- 8. TABLA ORDENES DE TRABAJO
--- =====================================================
 
-CREATE TABLE ordenes_trabajo (
-    numero BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
-    fecha_ingreso DATE NOT NULL DEFAULT CURRENT_DATE,
-    descripcion_problema TEXT NOT NULL,
-    estado VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE',
-    horas_trabajo NUMERIC(8,2) NOT NULL,
+ALTER TABLE "PistonRiojano"."Repuestos" OWNER TO postgres;
 
-    patente_vehiculo VARCHAR(15) NOT NULL,
-    legajo_mecanico INTEGER NOT NULL,
 
-    CONSTRAINT fk_orden_vehiculo
-        FOREIGN KEY (patente_vehiculo)
-        REFERENCES vehiculos(patente)
-        ON DELETE RESTRICT,
+ALTER TABLE "PistonRiojano"."Mecanicos"
+    ADD CONSTRAINT ck_especialidad CHECK (((especialidad)::text = ANY ((ARRAY['MOTOR'::character varying, 'ELECTRICIDAD'::character varying, 'FRENOS'::character varying, 'GENERAL'::character varying])::text[]))) NOT VALID;
 
-    CONSTRAINT fk_orden_mecanico
-        FOREIGN KEY (legajo_mecanico)
-        REFERENCES mecanicos(legajo)
-        ON DELETE RESTRICT,
 
-    CONSTRAINT chk_estado
-        CHECK (
-            estado IN (
-                'PENDIENTE',
-                'EN_REPARACION',
-                'FINALIZADA',
-                'ENTREGADA'
-            )
-        ),
 
-    CONSTRAINT chk_horas
-        CHECK (horas_trabajo > 0)
-);
+ALTER TABLE ONLY "PistonRiojano"."Clientes"
+    ADD CONSTRAINT "pk_Clientes" PRIMARY KEY (dni);
 
--- =====================================================
--- 9. TABLA DETALLE REPUESTOS
--- Relaciona órdenes con repuestos.
--- Una orden puede utilizar varios repuestos.
--- Un repuesto puede aparecer en varias órdenes.
--- =====================================================
 
-CREATE TABLE detalle_repuestos (
-    numero_orden BIGINT NOT NULL,
-    codigo_repuesto VARCHAR(20) NOT NULL,
-    cantidad INTEGER NOT NULL,
-    precio_aplicado NUMERIC(12,2) NOT NULL,
 
-    CONSTRAINT pk_detalle_repuestos
-        PRIMARY KEY (numero_orden, codigo_repuesto),
 
-    CONSTRAINT fk_detalle_orden
-        FOREIGN KEY (numero_orden)
-        REFERENCES ordenes_trabajo(numero)
-        ON DELETE CASCADE,
+ALTER TABLE ONLY "PistonRiojano"."DetallesRespuestos"
+    ADD CONSTRAINT "pk_DetallesRepuestos" PRIMARY KEY (codigo_repuesto, num_orden);
 
-    CONSTRAINT fk_detalle_repuesto
-        FOREIGN KEY (codigo_repuesto)
-        REFERENCES repuestos(codigo)
-        ON DELETE RESTRICT,
 
-    CONSTRAINT chk_cantidad
-        CHECK (cantidad > 0),
 
-    CONSTRAINT chk_precio_aplicado
-        CHECK (precio_aplicado >= 0)
-);
+ALTER TABLE ONLY "PistonRiojano"."Autos"
+    ADD CONSTRAINT pk_autos PRIMARY KEY (patente);
 
--- =====================================================
--- 10. CONTROL DE LOS TIPOS DE VEHICULOS
--- Garantiza que:
--- - Un AUTO tenga registro en autos.
--- - Una MOTO tenga registro en motos.
--- - Ningun vehiculo pertenezca a ambos tipos.
+
+
+
+ALTER TABLE ONLY "PistonRiojano"."Mecanicos"
+    ADD CONSTRAINT "pk_mecánicos" PRIMARY KEY (legajo);
+
+
+
+
+ALTER TABLE ONLY "PistonRiojano"."Motos"
+    ADD CONSTRAINT pk_motos PRIMARY KEY (patente);
+
+
 --
--- Se comprueba al confirmar la transaccion.
--- =====================================================
+-- TOC entry 4807 (class 2606 OID 32842)
+-- Name: Ordenes pk_orden; Type: CONSTRAINT; Schema: PistonRiojano; Owner: postgres
+--
 
-CREATE OR REPLACE FUNCTION verificar_tipo_vehiculo()
-RETURNS TRIGGER AS $$
-DECLARE
-    v_patente VARCHAR(15);
-    v_tipo VARCHAR(10);
-    existe_auto BOOLEAN;
-    existe_moto BOOLEAN;
-BEGIN
+ALTER TABLE ONLY "PistonRiojano"."Ordenes"
+    ADD CONSTRAINT pk_orden PRIMARY KEY (numero);
 
-    IF TG_OP = 'DELETE' THEN
-        v_patente := OLD.patente;
-    ELSE
-        v_patente := NEW.patente;
-    END IF;
 
-    SELECT tipo_vehiculo
-    INTO v_tipo
-    FROM vehiculos
-    WHERE patente = v_patente;
 
-    -- Si el vehiculo fue eliminado, no hay nada que verificar.
-    IF NOT FOUND THEN
-        RETURN NULL;
-    END IF;
 
-    SELECT EXISTS (
-        SELECT 1 FROM autos WHERE patente = v_patente
-    ) INTO existe_auto;
+ALTER TABLE ONLY "PistonRiojano"."Repuestos"
+    ADD CONSTRAINT pk_repuestos PRIMARY KEY (codigo);
 
-    SELECT EXISTS (
-        SELECT 1 FROM motos WHERE patente = v_patente
-    ) INTO existe_moto;
 
-    IF v_tipo = 'AUTO' AND (NOT existe_auto OR existe_moto) THEN
-        RAISE EXCEPTION
-            'El vehiculo % debe tener solamente un registro en autos',
-            v_patente;
-    END IF;
 
-    IF v_tipo = 'MOTO' AND (NOT existe_moto OR existe_auto) THEN
-        RAISE EXCEPTION
-            'El vehiculo % debe tener solamente un registro en motos',
-            v_patente;
-    END IF;
+ALTER TABLE ONLY "PistonRiojano"."Vehiculos"
+    ADD CONSTRAINT pk_vehiculos PRIMARY KEY (patente);
 
-    RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
 
-CREATE CONSTRAINT TRIGGER trg_verificar_vehiculo
-AFTER INSERT OR UPDATE OR DELETE ON vehiculos
-DEFERRABLE INITIALLY DEFERRED
-FOR EACH ROW
-EXECUTE FUNCTION verificar_tipo_vehiculo();
 
-CREATE CONSTRAINT TRIGGER trg_verificar_auto
-AFTER INSERT OR UPDATE OR DELETE ON autos
-DEFERRABLE INITIALLY DEFERRED
-FOR EACH ROW
-EXECUTE FUNCTION verificar_tipo_vehiculo();
+ALTER TABLE ONLY "PistonRiojano"."Clientes"
+    ADD CONSTRAINT uk_dni UNIQUE (dni);
 
-CREATE CONSTRAINT TRIGGER trg_verificar_moto
-AFTER INSERT OR UPDATE OR DELETE ON motos
-DEFERRABLE INITIALLY DEFERRED
-FOR EACH ROW
-EXECUTE FUNCTION verificar_tipo_vehiculo();
 
--- =====================================================
--- 11. INDICES PARA CONSULTAS FRECUENTES
--- =====================================================
 
-CREATE INDEX idx_vehiculos_cliente
-ON vehiculos(dni_cliente);
+ALTER TABLE ONLY "PistonRiojano"."Clientes"
+    ADD CONSTRAINT uk_email UNIQUE (email);
 
-CREATE INDEX idx_ordenes_estado
-ON ordenes_trabajo(estado);
 
-CREATE INDEX idx_ordenes_patente
-ON ordenes_trabajo(patente_vehiculo);
 
-CREATE INDEX idx_ordenes_mecanico
-ON ordenes_trabajo(legajo_mecanico);
 
-COMMIT;
+ALTER TABLE ONLY "PistonRiojano"."Mecanicos"
+    ADD CONSTRAINT uk_legajo UNIQUE (legajo);
 
--- =====================================================
--- FIN DEL SCHEMA
--- =====================================================
+
+
+
+ALTER TABLE ONLY "PistonRiojano"."Ordenes"
+    ADD CONSTRAINT uk_orden UNIQUE (numero);
+
+
+ALTER TABLE ONLY "PistonRiojano"."Vehiculos"
+    ADD CONSTRAINT uk_patente UNIQUE (patente);
+
+
+
+
+ALTER TABLE ONLY "PistonRiojano"."Repuestos"
+    ADD CONSTRAINT uk_repuestos UNIQUE (codigo);
+
+
+
+
+ALTER TABLE ONLY "PistonRiojano"."Clientes"
+    ADD CONSTRAINT uk_telefono UNIQUE (telefono);
+
+
+
+
+ALTER TABLE ONLY "PistonRiojano"."DetallesRespuestos"
+    ADD CONSTRAINT "fk_DetallesRepuestos_Ordenes" FOREIGN KEY (num_orden) REFERENCES "PistonRiojano"."Ordenes"(numero);
+
+
+
+ALTER TABLE ONLY "PistonRiojano"."DetallesRespuestos"
+    ADD CONSTRAINT "fk_DetallesRepuestos_Repuestos" FOREIGN KEY (codigo_repuesto) REFERENCES "PistonRiojano"."Repuestos"(codigo);
+
+
+
+
+ALTER TABLE ONLY "PistonRiojano"."Ordenes"
+    ADD CONSTRAINT fk_orden_mecanico FOREIGN KEY (responsable) REFERENCES "PistonRiojano"."Mecanicos"(legajo);
+
+
+
+
+ALTER TABLE ONLY "PistonRiojano"."Ordenes"
+    ADD CONSTRAINT fk_orden_vehiculo FOREIGN KEY (patente_vehiculo) REFERENCES "PistonRiojano"."Vehiculos"(patente) NOT VALID;
+
+
+
+
+ALTER TABLE ONLY "PistonRiojano"."Vehiculos"
+    ADD CONSTRAINT fk_vehiculos_clientes FOREIGN KEY (clientes_dni) REFERENCES "PistonRiojano"."Clientes"(dni);
+
+
+
+
+
