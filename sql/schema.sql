@@ -14,7 +14,7 @@ SET row_security = off;
 
 
 DROP SCHEMA IF EXISTS "PistonRiojano" CASCADE;
-CREATE SCHEMA "PistonRiojano";
+CREATE SCHEMA IF NOT EXISTS "PistonRiojano";
 
 
 ALTER SCHEMA "PistonRiojano" OWNER TO postgres;
@@ -29,7 +29,7 @@ CREATE TABLE "PistonRiojano"."Vehiculos" (
     patente character varying(7) NOT NULL,
     marca character varying(30) NOT NULL,
     modelo character varying(30) NOT NULL,
-    "año" integer NOT NULL,
+    anio integer NOT NULL,
     clientes_dni integer NOT NULL
 );
 
@@ -39,7 +39,6 @@ ALTER TABLE "PistonRiojano"."Vehiculos" OWNER TO postgres;
 
 
 CREATE TABLE "PistonRiojano"."Autos" (
-    NOT NULL patente,
     cantidad_puertas integer NOT NULL,
     combustible character varying(6) NOT NULL,
     CONSTRAINT ck_combustible CHECK (((combustible)::text = ANY ((ARRAY['NAFTA'::character varying, 'DIESEL'::character varying, 'GNC'::character varying])::text[])))
@@ -88,7 +87,6 @@ ALTER TABLE "PistonRiojano"."Mecanicos" OWNER TO postgres;
 
 
 CREATE TABLE "PistonRiojano"."Motos" (
-    NOT NULL patente,
     cilindrada integer NOT NULL
 )
 INHERITS ("PistonRiojano"."Vehiculos");
@@ -156,10 +154,7 @@ ALTER TABLE ONLY "PistonRiojano"."Motos"
     ADD CONSTRAINT pk_motos PRIMARY KEY (patente);
 
 
---
--- TOC entry 4807 (class 2606 OID 32842)
--- Name: Ordenes pk_orden; Type: CONSTRAINT; Schema: PistonRiojano; Owner: postgres
---
+
 
 ALTER TABLE ONLY "PistonRiojano"."Ordenes"
     ADD CONSTRAINT pk_orden PRIMARY KEY (numero);
