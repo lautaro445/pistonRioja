@@ -18,7 +18,12 @@
 
     <dependencies>
 
-        <!-- Aquí van las dependencias de tu proyecto -->
+       
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>42.7.8</version>
+</dependency>
 
     </dependencies>
 
