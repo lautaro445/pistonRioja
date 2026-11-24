@@ -4,15 +4,18 @@ public class DetallesRepuestos {
     private Repuestos codigo_repuesto;
     private Ordenes num_orden;
     private float pracio_vigente;
+    private int cantidad;
 
     public DetallesRepuestos() {
     }
 
-    public DetallesRepuestos(Repuestos codigo_repuesto, Ordenes num_orden, float pracio_vigente) {
+    public DetallesRepuestos(Repuestos codigo_repuesto, Ordenes num_orden, float pracio_vigente, int cantidad) {
         this.codigo_repuesto = codigo_repuesto;
         this.num_orden = num_orden;
         this.pracio_vigente = pracio_vigente;
+        this.cantidad = cantidad;
     }
+
 
     public Repuestos getCodigo_repuesto() {
         return codigo_repuesto;
@@ -36,6 +39,14 @@ public class DetallesRepuestos {
 
     public void setPracio_vigente(float pracio_vigente) {
         this.pracio_vigente = pracio_vigente;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
     
     
