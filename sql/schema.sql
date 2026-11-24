@@ -100,6 +100,7 @@ ALTER TABLE "PistonRiojano"."Motos" OWNER TO postgres;
 CREATE TABLE "PistonRiojano"."Ordenes" (
     numero integer NOT NULL,
     fecha_ingreso date NOT NULL,
+    horas_estimadas integer NOT NULL,
     descripcion_problema character varying(300) NOT NULL,
     responsable integer NOT NULL,
     estado_actual character varying(13) NOT NULL,
