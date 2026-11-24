@@ -1,7 +1,7 @@
 INSERT INTO "PistonRiojano"."Clientes" (dni, nombre, apellido, telefono, email) VALUES (
-'45172714'::integer, 'ANDRES'::character varying, 'VEGA'::character varying, '3804561825'::numeric, 'andreslarioja10@gmail.com'::character varying),
-('25147628'::integer, 'LEANDRO'::character varying, 'PAREDES'::character varying, '3804825246'::numeric, 'campeon2026@gmail.com'::character varying),
-('36172729'::integer, 'NESTOR'::character varying, 'VALDEZ'::character varying, '3804752638'::numeric, 'nestitor16@gmail.com'::character varying);
+'45172714'::character varying, 'ANDRES'::character varying, 'VEGA'::character varying, '3804561825'::character varying, 'andreslarioja10@gmail.com'::character varying),
+('25147628'::character varying, 'LEANDRO'::character varying, 'PAREDES'::character varying, '3804825246'::character varying, 'campeon2026@gmail.com'::character varying),
+('36172729'::character varying, 'NESTOR'::character varying, 'VALDEZ'::character varying, '3804752638'::character varying, 'nestitor16@gmail.com'::character varying);
 
 INSERT INTO "PistonRiojano"."Mecanicos" (legajo, nombre, apellidos, especialidad, valor_hora) VALUES (
 '1'::integer, 'MARCOS'::character varying, 'VERA'::character varying, 'GENERAL'::character varying, '400'::integer),

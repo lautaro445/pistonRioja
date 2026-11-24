@@ -30,7 +30,7 @@ CREATE TABLE "PistonRiojano"."Vehiculos" (
     marca character varying(30) NOT NULL,
     modelo character varying(30) NOT NULL,
     anio integer NOT NULL,
-    clientes_dni integer NOT NULL
+    clientes_dni character varying(10) NOT NULL
 );
 
 
@@ -51,10 +51,10 @@ ALTER TABLE "PistonRiojano"."Autos" OWNER TO postgres;
 
 
 CREATE TABLE "PistonRiojano"."Clientes" (
-    dni integer NOT NULL,
+    dni character varying(10) NOT NULL,
     nombre character varying(20) NOT NULL,
     apellido character varying(20) NOT NULL,
-    telefono numeric(10,0) NOT NULL,
+    telefono character varying(10) NOT NULL,
     email character varying(30) NOT NULL
 );
 
