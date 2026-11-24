@@ -30,7 +30,7 @@ public class VehiculoDAO {
             ps.setString(2, vehiculo.getMarca());
             ps.setString(3, vehiculo.getModelo());
             ps.setInt(4, vehiculo.getAnio());
-            ps.setInt(5, vehiculo.getCliente().getDni());
+            ps.setString(5, vehiculo.getCliente().getDni());
 
             return ps.executeUpdate() > 0;
         }
@@ -121,7 +121,7 @@ public class VehiculoDAO {
             ps.setString(1, vehiculo.getMarca());
             ps.setString(2, vehiculo.getModelo());
             ps.setInt(3, vehiculo.getAnio());
-            ps.setInt(4, vehiculo.getCliente().getDni());
+            ps.setString(4, vehiculo.getCliente().getDni());
             ps.setString(5, vehiculo.getPatente());
 
             return ps.executeUpdate() > 0;

@@ -23,7 +23,7 @@ public class AutoDAO {
             ps.setString(2, auto.getMarca());
             ps.setString(3, auto.getModelo());
             ps.setInt(4, auto.getAnio());
-            ps.setInt(5, auto.getCliente().getDni());
+            ps.setString(5, auto.getCliente().getDni());
             ps.setInt(6, auto.getCantidad_puertas());
             ps.setString(7, auto.getCombustible().name());
 
@@ -86,7 +86,7 @@ public class AutoDAO {
             ps.setString(1, auto.getMarca());
             ps.setString(2, auto.getModelo());
             ps.setInt(3, auto.getAnio());
-            ps.setInt(4, auto.getCliente().getDni());
+            ps.setString(4, auto.getCliente().getDni());
             ps.setInt(5, auto.getCantidad_puertas());
             ps.setString(6, auto.getCombustible().name());
             ps.setString(7, auto.getPatente());

@@ -22,7 +22,7 @@ public class MotoDAO {
             ps.setString(2, moto.getMarca());
             ps.setString(3, moto.getModelo());
             ps.setInt(4, moto.getAnio());
-            ps.setInt(5, moto.getCliente().getDni());
+            ps.setString(5, moto.getCliente().getDni());
             ps.setInt(6, moto.getCilindrada());
 
             return ps.executeUpdate() > 0;
@@ -84,7 +84,7 @@ public class MotoDAO {
             ps.setString(1, moto.getMarca());
             ps.setString(2, moto.getModelo());
             ps.setInt(3, moto.getAnio());
-            ps.setInt(4, moto.getCliente().getDni());
+            ps.setString(4, moto.getCliente().getDni());
             ps.setInt(5, moto.getCilindrada());
             ps.setString(6, moto.getPatente());
 

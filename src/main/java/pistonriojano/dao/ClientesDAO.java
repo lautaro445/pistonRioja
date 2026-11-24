@@ -18,10 +18,10 @@ public class ClientesDAO {
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, cliente.getDni());
+            ps.setString(1, cliente.getDni());
             ps.setString(2, cliente.getNombre());
             ps.setString(3, cliente.getApellido());
-            ps.setInt(4, cliente.getTelefono());
+            ps.setString(4, cliente.getTelefono());
             ps.setString(5, cliente.getEmail());
 
             return ps.executeUpdate() > 0;
@@ -81,9 +81,9 @@ public class ClientesDAO {
 
             ps.setString(1, cliente.getNombre());
             ps.setString(2, cliente.getApellido());
-            ps.setInt(3, cliente.getTelefono());
+            ps.setString(3, cliente.getTelefono());
             ps.setString(4, cliente.getEmail());
-            ps.setInt(5, cliente.getDni());
+            ps.setString(5, cliente.getDni());
 
             return ps.executeUpdate() > 0;
         }
@@ -105,10 +105,10 @@ public class ClientesDAO {
 
     private Clientes mapearCliente(ResultSet rs) throws SQLException {
         return new Clientes(
-            rs.getInt("dni"),
+            rs.getString("dni"),
             rs.getString("nombre"),
             rs.getString("apellido"),
-            rs.getInt("telefono"),
+            rs.getString("telefono"),
             rs.getString("email")
         );
     }

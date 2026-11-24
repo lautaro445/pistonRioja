@@ -3,18 +3,18 @@ package pistonriojano.modelo;
 
 public class Clientes {
 
-    private int dni;
+    private String dni;
     private String nombre;
     private String apellido;
-    private int telefono;
+    private String telefono;
     private String email;
 
     public Clientes() {
     }
     
 
-    public Clientes(int dni, String nombre, String apellido,
-                   int telefono, String email) {
+    public Clientes(String dni, String nombre, String apellido,
+                   String telefono, String email) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -22,12 +22,13 @@ public class Clientes {
         this.email = email;
     }
 
-    public int getDni() {
+    public String getDni() {
         return dni;
     }
 
-    public void setDni(int dni) {
+    public String setDni(String dni) {
         this.dni = dni;
+        return null;
     }
 
     public String getNombre() {
@@ -46,11 +47,11 @@ public class Clientes {
         this.apellido = apellido;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
