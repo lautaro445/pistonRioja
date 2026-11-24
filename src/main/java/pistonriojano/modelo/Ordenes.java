@@ -5,6 +5,7 @@ public class Ordenes {
     private int numero;
     private LocalDate fecha_ingreso;
     private String descripcion_problema;
+    private int horas_estimadas;
     private Mecanicos responsable;
     private Estados estado;
     private Vehiculos patente_vehiculo;
@@ -12,14 +13,16 @@ public class Ordenes {
     public Ordenes() {
     }
 
-    public Ordenes(int numero, LocalDate fecha_ingreso, String descripcion_problema, Mecanicos responsable, Estados estado, Vehiculos patente_vehiculo) {
+    public Ordenes(int numero, LocalDate fecha_ingreso, String descripcion_problema, int horas_estimadas, Mecanicos responsable, Estados estado, Vehiculos patente_vehiculo) {
         this.numero = numero;
         this.fecha_ingreso = fecha_ingreso;
         this.descripcion_problema = descripcion_problema;
+        this.horas_estimadas = horas_estimadas;
         this.responsable = responsable;
         this.estado = estado;
         this.patente_vehiculo = patente_vehiculo;
     }
+
 
     public int getNumero() {
         return numero;
@@ -68,5 +71,14 @@ public class Ordenes {
     public void setPatente_vehiculo(Vehiculos patente_vehiculo) {
         this.patente_vehiculo = patente_vehiculo;
     }
+
+    public int getHoras_estimadas() {
+        return horas_estimadas;
+    }
+
+    public void setHoras_estimadas(int horas_estimadas) {
+        this.horas_estimadas = horas_estimadas;
+    }
+    
     
 }
