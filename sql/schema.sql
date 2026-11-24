@@ -66,7 +66,8 @@ ALTER TABLE "PistonRiojano"."Clientes" OWNER TO postgres;
 CREATE TABLE "PistonRiojano"."DetallesRespuestos" (
     codigo_repuesto character varying(10) NOT NULL,
     num_orden integer NOT NULL,
-    precio_vigente numeric(12,2) NOT NULL
+    precio_vigente numeric(12,2) NOT NULL,
+    cantidad integer NOT NULL
 );
 
 
