@@ -45,11 +45,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Clientes.addActionListener(this::ClientesActionPerformed);
 
         Vehiculos.setText("Vehiculos");
+        Vehiculos.addActionListener(this::VehiculosActionPerformed);
 
         Repuestos.setText("Repuestos");
         Repuestos.addActionListener(this::RepuestosActionPerformed);
 
         Ordenes.setText("Ordenes");
+        Ordenes.addActionListener(this::OrdenesActionPerformed);
 
         Salir.setText("Salir");
         Salir.addActionListener(this::SalirActionPerformed);
@@ -102,7 +104,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_ClientesActionPerformed
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        // TODO add your handling code here:
+    System.exit(0);    // TODO add your handling code here:
     }//GEN-LAST:event_SalirActionPerformed
 
     private void RepuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RepuestosActionPerformed
@@ -113,6 +115,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             repuesto.requestFocus();
             this.dispose();// TODO add your handling code here:
     }//GEN-LAST:event_RepuestosActionPerformed
+
+    private void VehiculosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VehiculosActionPerformed
+       Vehiculos vehiculos = new Vehiculos();
+       vehiculos.setVisible(true);
+           vehiculos.toFront();
+            vehiculos.requestFocus();
+            this.dispose();// TODO add your handling code here:
+    }//GEN-LAST:event_VehiculosActionPerformed
+
+    private void OrdenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrdenesActionPerformed
+    ConsultarOrdenes orden = new ConsultarOrdenes();
+     orden.setVisible(true);
+           orden.toFront();
+            orden.requestFocus();
+            this.dispose();
+    
+// TODO add your handling code here:
+    }//GEN-LAST:event_OrdenesActionPerformed
 
     /**
      * @param args the command line arguments

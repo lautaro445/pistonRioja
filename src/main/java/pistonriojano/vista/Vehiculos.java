@@ -110,6 +110,7 @@ Moto.addActionListener(this::MotoActionPerformed);
         PuertaClinidrada = new javax.swing.JTextField();
         label2 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
+        Volver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -170,6 +171,9 @@ Moto.addActionListener(this::MotoActionPerformed);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        Volver.setText("volver");
+        Volver.addActionListener(this::VolverActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -199,9 +203,12 @@ Moto.addActionListener(this::MotoActionPerformed);
                         .addGap(18, 18, 18)
                         .addComponent(Cliente, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(67, 67, 67)
-                        .addComponent(Auto)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(67, 67, 67)
+                                .addComponent(Auto))
+                            .addComponent(Volver, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Guaradar)
@@ -246,7 +253,9 @@ Moto.addActionListener(this::MotoActionPerformed);
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
-                .addComponent(Guaradar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Guaradar)
+                    .addComponent(Volver))
                 .addGap(20, 20, 20))
         );
 
@@ -385,6 +394,14 @@ private void limpiarCampos() {
        mostrarMoto(); // TODO add your handling code here:
     }//GEN-LAST:event_MotoActionPerformed
 
+    private void VolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VolverActionPerformed
+    VentanaPrincipal ventana = new VentanaPrincipal();
+    ventana.setVisible(true);
+           ventana.toFront();
+            ventana.requestFocus();
+            this.dispose();    // TODO add your handling code here:
+    }//GEN-LAST:event_VolverActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -419,6 +436,7 @@ private void limpiarCampos() {
     private javax.swing.JButton Moto;
     private javax.swing.JTextField Patente;
     private javax.swing.JTextField PuertaClinidrada;
+    private javax.swing.JButton Volver;
     private javax.swing.JTextField año;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
