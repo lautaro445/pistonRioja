@@ -8,26 +8,27 @@ import java.util.List;
 
 public class DetallesRepuestosDAO {
 
-    public boolean insertar(DetallesRepuestos detalle) throws SQLException {
-        String sql = """
-            INSERT INTO "PistonRiojano"."DetallesRespuestos"
-            (codigo_repuesto, num_orden, precio_vigente)
-            VALUES (?, ?, ?)
-            """;
+   public boolean insertar(DetallesRepuestos detalle) throws SQLException {
+    String sql = """
+        INSERT INTO "PistonRiojano"."DetallesRespuestos"
+        (codigo_repuesto, num_orden, precio_vigente, cantidad)
+        VALUES (?, ?, ?, ?)
+        """;
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, detalle.getCodigo_repuesto().getCodigo());
-            ps.setInt(2, detalle.getNum_orden().getNumero());
-            ps.setFloat(3, detalle.getPracio_vigente());
+        ps.setString(1, detalle.getCodigo_repuesto().getCodigo());
+        ps.setInt(2, detalle.getNum_orden().getNumero());
+        ps.setFloat(3, detalle.getPracio_vigente());
+        ps.setInt(4, detalle.getCantidad());
 
-            return ps.executeUpdate() > 0;
-        }
+        return ps.executeUpdate() > 0;
     }
+}
 
-    public DetallesRepuestos buscar(
-            String codigo, int numeroOrden) throws SQLException {
+    public DetallesRepuestos buscar(String codigo, int numeroOrden)
+            throws SQLException {
 
         String sql = """
             SELECT * FROM "PistonRiojano"."DetallesRespuestos"
@@ -48,26 +49,6 @@ public class DetallesRepuestosDAO {
         }
 
         return null;
-    }
-
-    public List<DetallesRepuestos> listar() throws SQLException {
-        List<DetallesRepuestos> lista = new ArrayList<>();
-
-        String sql = """
-            SELECT * FROM "PistonRiojano"."DetallesRespuestos"
-            ORDER BY num_orden, codigo_repuesto
-            """;
-
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(mapearDetalle(rs));
-            }
-        }
-
-        return lista;
     }
 
     public List<DetallesRepuestos> listarPorOrden(int numeroOrden)
@@ -94,24 +75,6 @@ public class DetallesRepuestosDAO {
         }
 
         return lista;
-    }
-
-    public boolean modificar(DetallesRepuestos detalle) throws SQLException {
-        String sql = """
-            UPDATE "PistonRiojano"."DetallesRespuestos"
-            SET precio_vigente = ?
-            WHERE codigo_repuesto = ? AND num_orden = ?
-            """;
-
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setFloat(1, detalle.getPracio_vigente());
-            ps.setString(2, detalle.getCodigo_repuesto().getCodigo());
-            ps.setInt(3, detalle.getNum_orden().getNumero());
-
-            return ps.executeUpdate() > 0;
-        }
     }
 
     public boolean eliminar(String codigo, int numeroOrden)
@@ -149,7 +112,8 @@ public class DetallesRepuestosDAO {
         );
 
         detalle.setPracio_vigente(rs.getFloat("precio_vigente"));
-
+        detalle.setCantidad(rs.getInt("cantidad"));
+        
         return detalle;
     }
 }

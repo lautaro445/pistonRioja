@@ -3,7 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pistonriojano.vista;
-
+import pistonriojano.dao.RepuestoDAO;
+import pistonriojano.modelo.Repuestos;
+import java.util.List;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 /**
  *
  * @author lautaro
@@ -15,6 +20,39 @@ public class ListarRepuestos extends javax.swing.JFrame {
     /**
      * Creates new form ListarRepuestos
      */
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+
+    RepuestoDAO dao = new RepuestoDAO();
+
+    try {
+        List<Repuestos> repuestos = dao.listar();
+
+        DefaultTableModel modelo = new DefaultTableModel();
+
+        modelo.addColumn("Código");
+        modelo.addColumn("Descripción");
+        modelo.addColumn("Precio unitario");
+        modelo.addColumn("Stock disponible");
+
+        for (Repuestos repuesto : repuestos) {
+            modelo.addRow(new Object[]{
+                repuesto.getCodigo(),
+                repuesto.getDescripcion(),
+                repuesto.getPrecio_unitario(),
+                repuesto.getStock_disponible()
+            });
+        }
+
+        jTable1.setModel(modelo);
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Error al listar los repuestos: " + e.getMessage()
+        );
+    }
+}
     public ListarRepuestos() {
         initComponents();
     }
@@ -31,7 +69,7 @@ public class ListarRepuestos extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        buscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -41,7 +79,8 @@ public class ListarRepuestos extends javax.swing.JFrame {
 
         jLabel2.setText("Busqueda por codigo u descripcion");
 
-        jButton1.setText("jButton1");
+        buscar.setText("buscar");
+        buscar.addActionListener(this::buscarActionPerformed);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -68,7 +107,7 @@ public class ListarRepuestos extends javax.swing.JFrame {
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jTextField1))
                         .addGap(53, 53, 53)
-                        .addComponent(jButton1))
+                        .addComponent(buscar))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 25, Short.MAX_VALUE))
         );
@@ -81,7 +120,7 @@ public class ListarRepuestos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(buscar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -89,6 +128,56 @@ public class ListarRepuestos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
+        RepuestoDAO dao = new RepuestoDAO();
+
+    try {
+        String texto = jTextField1.getText().trim();
+
+        List<Repuestos> repuestos;
+
+        if (texto.isEmpty()) {
+            repuestos = dao.listar();
+        } else {
+            repuestos = dao.buscar(texto);
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel();
+
+        modelo.addColumn("Código");
+        modelo.addColumn("Descripción");
+        modelo.addColumn("Precio unitario");
+        modelo.addColumn("Stock disponible");
+
+        for (Repuestos repuesto : repuestos) {
+            modelo.addRow(new Object[]{
+                repuesto.getCodigo(),
+                repuesto.getDescripcion(),
+                repuesto.getPrecio_unitario(),
+                repuesto.getStock_disponible()
+            });
+        }
+
+        jTable1.setModel(modelo);
+
+        if (repuestos.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this,
+                "No se encontraron repuestos."
+            );
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Error al buscar repuestos: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -116,7 +205,7 @@ public class ListarRepuestos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton buscar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

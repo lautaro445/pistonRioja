@@ -8,27 +8,28 @@ import java.util.List;
 
 public class OrdenTrabajoDAO {
 
-    public boolean insertar(Ordenes orden) throws SQLException {
-        String sql = """
-            INSERT INTO "PistonRiojano"."Ordenes"
-            (numero, fecha_ingreso, descripcion_problema,
-             responsable, estado_actual, patente_vehiculo)
-            VALUES (?, ?, ?, ?, ?, ?)
-            """;
+   public boolean insertar(Ordenes orden) throws SQLException {
+    String sql = """
+        INSERT INTO "PistonRiojano"."Ordenes"
+        (numero, fecha_ingreso, descripcion_problema,
+         horas_estimadas, responsable, estado_actual, patente_vehiculo)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """;
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, orden.getNumero());
-            ps.setDate(2, Date.valueOf(orden.getFecha_ingreso()));
-            ps.setString(3, orden.getDescripcion_problema());
-            ps.setInt(4, orden.getResponsable().getLegajo());
-            ps.setString(5, orden.getEstado().name());
-            ps.setString(6, orden.getPatente_vehiculo().getPatente());
+        ps.setInt(1, orden.getNumero());
+        ps.setDate(2, Date.valueOf(orden.getFecha_ingreso()));
+        ps.setString(3, orden.getDescripcion_problema());
+        ps.setInt(4, orden.getHoras_estimadas());
+        ps.setInt(5, orden.getResponsable().getLegajo());
+        ps.setString(6, orden.getEstado().name());
+        ps.setString(7, orden.getPatente_vehiculo().getPatente());
 
-            return ps.executeUpdate() > 0;
-        }
+        return ps.executeUpdate() > 0;
     }
+}
 
     public Ordenes buscarPorNumero(int numero) throws SQLException {
         String sql = """
@@ -137,7 +138,7 @@ public class OrdenTrabajoDAO {
                 rs.getString("patente_vehiculo")
             )
         );
-
+orden.setHoras_estimadas(rs.getInt("horas_estimadas"));
         return orden;
     }
 }

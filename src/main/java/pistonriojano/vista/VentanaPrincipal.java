@@ -47,6 +47,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Vehiculos.setText("Vehiculos");
 
         Repuestos.setText("Repuestos");
+        Repuestos.addActionListener(this::RepuestosActionPerformed);
 
         Ordenes.setText("Ordenes");
 
@@ -103,6 +104,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SalirActionPerformed
+
+    private void RepuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RepuestosActionPerformed
+    ListarRepuestos repuesto = new ListarRepuestos();
+    repuesto.setLocationRelativeTo(null);
+           repuesto.setVisible(true);
+           repuesto.toFront();
+            repuesto.requestFocus();
+            this.dispose();// TODO add your handling code here:
+    }//GEN-LAST:event_RepuestosActionPerformed
 
     /**
      * @param args the command line arguments

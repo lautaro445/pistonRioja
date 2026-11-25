@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pistonriojano.vista;
-
+import pistonriojano.dao.RepuestoDAO;
+import pistonriojano.modelo.Repuestos;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 /**
  *
  * @author lautaro
@@ -17,6 +20,7 @@ public class ActualizarRepuesto extends javax.swing.JFrame {
      */
     public ActualizarRepuesto() {
         initComponents();
+        actualizar.setEnabled(false);
     }
 
     /**
@@ -32,6 +36,13 @@ public class ActualizarRepuesto extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         Buscar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        descripcion = new javax.swing.JTextField();
+        CostoUni = new javax.swing.JTextField();
+        stock = new javax.swing.JTextField();
+        actualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -40,22 +51,49 @@ public class ActualizarRepuesto extends javax.swing.JFrame {
         jLabel2.setText("Codigo de repuesto");
 
         Buscar.setText("Buscar");
+        Buscar.addActionListener(this::BuscarActionPerformed);
+
+        jLabel3.setText("Descripcion");
+
+        jLabel4.setText("costo unitario");
+
+        jLabel5.setText("Stock");
+
+        CostoUni.addActionListener(this::CostoUniActionPerformed);
+
+        actualizar.setText("actualizar");
+        actualizar.addActionListener(this::actualizarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
                 .addComponent(Buscar)
                 .addGap(70, 70, 70))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(stock, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(CostoUni, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(descripcion, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(actualizar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -67,11 +105,116 @@ public class ActualizarRepuesto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Buscar))
-                .addGap(0, 216, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addGap(2, 2, 2)
+                        .addComponent(descripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(CostoUni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(stock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 25, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(actualizar)
+                        .addContainerGap())))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void CostoUniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CostoUniActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CostoUniActionPerformed
+
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+      String codigo = jTextField1.getText().trim();
+
+    if (codigo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Introduce el código del repuesto.");
+        return;
+    }
+
+    RepuestoDAO dao = new RepuestoDAO();
+
+    try {
+        Repuestos repuesto = dao.buscarPorCodigo(codigo);
+
+        if (repuesto != null) {
+
+            descripcion.setText(repuesto.getDescripcion());
+            CostoUni.setText(String.valueOf(repuesto.getPrecio_unitario()));
+            stock.setText(String.valueOf(repuesto.getStock_disponible()));
+            actualizar.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Repuesto no encontrado.");
+            actualizar.setEnabled(false);
+            descripcion.setText("");
+            CostoUni.setText("");
+            stock.setText("");
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }   // TODO add your handling code here:
+    }//GEN-LAST:event_BuscarActionPerformed
+
+    private void actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarActionPerformed
+     
+    String codigo = jTextField1.getText().trim();
+    String desc = descripcion.getText().trim();
+
+    if (codigo.isEmpty() || desc.isEmpty()
+            || CostoUni.getText().trim().isEmpty()
+            || stock.getText().trim().isEmpty()) {
+
+        JOptionPane.showMessageDialog(this, "Completa todos los campos.");
+        return;
+    }
+
+    try {
+        float precio = Float.parseFloat(CostoUni.getText().trim().replace(',', '.'));
+        int cantidad = Integer.parseInt(stock.getText().trim());
+
+        if (precio < 0 || cantidad < 0) {
+            JOptionPane.showMessageDialog(this, "El precio y el stock no pueden ser negativos.");
+            return;
+        }
+
+        Repuestos repuesto = new Repuestos(
+            codigo,
+            desc,
+            precio,
+            cantidad
+        );
+
+        RepuestoDAO dao = new RepuestoDAO();
+
+        if (dao.modificar(repuesto)) {
+    JOptionPane.showMessageDialog(this, "Repuesto actualizado correctamente.");
+
+    actualizar.setEnabled(false);
+    descripcion.setText("");
+    CostoUni.setText("");
+    stock.setText("");
+    jTextField1.setText("");
+
+} else {
+    JOptionPane.showMessageDialog(this, "No se pudo actualizar el repuesto.");
+}
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El precio o el stock deben ser números válidos.");
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage());
+    }   // TODO add your handling code here:
+    }//GEN-LAST:event_actualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -100,8 +243,15 @@ public class ActualizarRepuesto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Buscar;
+    private javax.swing.JTextField CostoUni;
+    private javax.swing.JButton actualizar;
+    private javax.swing.JTextField descripcion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField stock;
     // End of variables declaration//GEN-END:variables
 }

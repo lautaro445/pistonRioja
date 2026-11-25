@@ -110,4 +110,33 @@ public class RepuestoDAO {
             rs.getInt("stock_disponible")
         );
     }
-}
+
+    
+    public List<Repuestos> buscar(String texto) throws SQLException {
+
+    List<Repuestos> lista = new ArrayList<>();
+
+    String sql = """
+        SELECT * FROM "PistonRiojano"."Repuestos"
+        WHERE codigo ILIKE ? OR descripcion ILIKE ?
+        ORDER BY codigo
+        """;
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, "%" + texto + "%");
+        ps.setString(2, "%" + texto + "%");
+
+        try (ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapearRepuesto(rs));
+            }
+        }
+    }
+
+    return lista;
+}   
+    }
+

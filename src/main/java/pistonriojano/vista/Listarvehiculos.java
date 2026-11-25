@@ -4,6 +4,14 @@
  */
 package pistonriojano.vista;
 
+import pistonriojano.dao.VehiculoDAO;
+import pistonriojano.modelo.Vehiculos;
+import pistonriojano.modelo.Autos;
+import pistonriojano.modelo.Motos;
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author lautaro
@@ -11,13 +19,127 @@ package pistonriojano.vista;
 public class Listarvehiculos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Listarvehiculos.class.getName());
+ public Listarvehiculos() {
+    initComponents();
+    configurarTabla();
+    setTitle("Lista de vehículos");
+    setSize(1000, 500);
+    setLocationRelativeTo(null);
+}
+private void configurarTabla() {
 
-    /**
-     * Creates new form Listarvehiculos
-     */
-    public Listarvehiculos() {
-        initComponents();
+    DefaultTableModel modelo = new DefaultTableModel(
+        new Object[][]{},
+        new String[]{
+            "Patente",
+            "Marca",
+            "Modelo",
+            "Año",
+            "Cliente",
+            "Tipo",
+            "Puertas",
+            "Combustible",
+            "Cilindrada"
+        }
+    ) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+
+    jTable1.setModel(modelo);
+    jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+}
+
+private void cargarVehiculos() {
+
+    DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+    modelo.setRowCount(0);
+
+    VehiculoDAO dao = new VehiculoDAO();
+
+    try {
+        List<Vehiculos> lista = dao.listar();
+
+        for (Vehiculos v : lista) {
+
+            String cliente = "";
+
+            if (v.getCliente() != null) {
+                cliente = v.getCliente().getDni();
+            }
+
+            if (v instanceof Autos) {
+
+                Autos auto = (Autos) v;
+
+                modelo.addRow(new Object[]{
+                    auto.getPatente(),
+                    auto.getMarca(),
+                    auto.getModelo(),
+                    auto.getAnio(),
+                    cliente,
+                    "Auto",
+                    auto.getCantidad_puertas(),
+                    auto.getCombustible(),
+                    "-"
+                });
+
+            } else if (v instanceof Motos) {
+
+                Motos moto = (Motos) v;
+
+                modelo.addRow(new Object[]{
+                    moto.getPatente(),
+                    moto.getMarca(),
+                    moto.getModelo(),
+                    moto.getAnio(),
+                    cliente,
+                    "Moto",
+                    "-",
+                    "-",
+                    moto.getCilindrada()
+                });
+            }
+        }
+
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay vehículos registrados.");
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Error al cargar vehículos: " + e.getMessage()
+        );
     }
+}
+
+    
+
+    public static void main(String args[]) {
+
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info :
+                    javax.swing.UIManager.getInstalledLookAndFeels()) {
+
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException |
+                 javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
+        java.awt.EventQueue.invokeLater(() ->
+                new Listarvehiculos().setVisible(true)
+        );
+    }
+
+  
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -61,11 +183,8 @@ public class Listarvehiculos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 25, Short.MAX_VALUE))
+            .addComponent(jLabel1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 962, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -75,7 +194,7 @@ public class Listarvehiculos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -83,33 +202,13 @@ public class Listarvehiculos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+     cargarVehiculos();   // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Listarvehiculos().setVisible(true));
-    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

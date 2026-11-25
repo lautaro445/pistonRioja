@@ -3,6 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pistonriojano.vista;
+import pistonriojano.dao.VehiculoDAO;
+import pistonriojano.dao.ClientesDAO;
+import pistonriojano.modelo.Autos;
+import pistonriojano.modelo.Motos;
+import pistonriojano.modelo.Clientes;
+import pistonriojano.modelo.Combustibles;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
+
 
 /**
  *
@@ -11,13 +21,65 @@ package pistonriojano.vista;
 public class Vehiculos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Vehiculos.class.getName());
+private String tipoVehiculo = "";
+    
+    private void mostrarAuto() {
 
+    tipoVehiculo = "AUTO";
+
+    panelEspecifico.setVisible(true);
+
+    label1.setText("Cantidad de puertas");
+    label2.setText("Combustible");
+
+    PuertaClinidrada.setText("");
+    PuertaClinidrada.setVisible(true);
+
+    jComboBox1.removeAllItems();
+    jComboBox1.addItem("Nafta");
+    jComboBox1.addItem("Diesel");
+    jComboBox1.addItem("GNC");
+    label1.setVisible(true);
+    label2.setVisible(true);
+    jComboBox1.setVisible(true);
+
+    panelEspecifico.revalidate();
+    panelEspecifico.repaint();
+}
+    private void mostrarMoto() {
+
+    tipoVehiculo = "MOTO";
+
+    panelEspecifico.setVisible(true);
+
+    label1.setText("Cilindrada");
+
+    PuertaClinidrada.setText("");
+    PuertaClinidrada.setVisible(true);
+
+    label1.setVisible(true);
+
+    // En una moto no necesitamos combustible como dato específico
+    label2.setVisible(false);
+    jComboBox1.setVisible(false);
+
+    panelEspecifico.revalidate();
+    panelEspecifico.repaint();
+}
     /**
      * Creates new form Vehiculos
      */
-    public Vehiculos() {
-        initComponents();
-    }
+   public Vehiculos() {
+    initComponents();
+Moto.addActionListener(this::MotoActionPerformed);
+    jComboBox1.removeAllItems();
+
+    label1.setVisible(false);
+    label2.setVisible(false);
+    PuertaClinidrada.setVisible(false);
+    jComboBox1.setVisible(false);
+    panelEspecifico.setVisible(false);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,54 +96,120 @@ public class Vehiculos extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        Auto = new javax.swing.JButton();
+        Moto = new javax.swing.JButton();
+        Guaradar = new javax.swing.JButton();
+        Patente = new javax.swing.JTextField();
+        Modelo = new javax.swing.JTextField();
+        año = new javax.swing.JTextField();
+        Marca = new javax.swing.JTextField();
+        Cliente = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        panelEspecifico = new javax.swing.JPanel();
+        label1 = new javax.swing.JLabel();
+        PuertaClinidrada = new javax.swing.JTextField();
+        label2 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Registro de vehiculos");
 
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("Patente");
 
-        jLabel3.setText("jLabel3");
+        jLabel3.setText("Modelo");
 
-        jLabel4.setText("jLabel4");
+        jLabel4.setText("Año");
 
-        jLabel5.setText("jLabel5");
+        jLabel5.setText("Marca");
 
-        jLabel6.setText("jLabel6");
+        jLabel6.setText("Cliente");
 
-        jButton1.setText("jButton1");
+        Auto.setText("Auto");
+        Auto.addActionListener(this::AutoActionPerformed);
 
-        jButton2.setText("jButton2");
+        Moto.setText("moto");
+        Moto.addActionListener(this::MotoActionPerformed);
 
-        jButton3.setText("jButton3");
+        Guaradar.setText("Guardar");
+        Guaradar.addActionListener(this::GuaradarActionPerformed);
+
+        año.addActionListener(this::añoActionPerformed);
+
+        jLabel7.setText("Datos especificos:");
+
+        label1.setText("puertas/cilindrada");
+
+        label2.setText("combustibles");
+
+        javax.swing.GroupLayout panelEspecificoLayout = new javax.swing.GroupLayout(panelEspecifico);
+        panelEspecifico.setLayout(panelEspecificoLayout);
+        panelEspecificoLayout.setHorizontalGroup(
+            panelEspecificoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEspecificoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(label1)
+                .addContainerGap(263, Short.MAX_VALUE))
+            .addGroup(panelEspecificoLayout.createSequentialGroup()
+                .addGroup(panelEspecificoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label2)
+                    .addComponent(PuertaClinidrada, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        panelEspecificoLayout.setVerticalGroup(
+            panelEspecificoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEspecificoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(label1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PuertaClinidrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(label2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Modelo)
+                            .addComponent(año)
+                            .addComponent(Marca))))
+                .addGap(0, 236, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(Cliente, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(67, 67, 67)
-                        .addComponent(jButton1)
+                        .addComponent(Auto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addComponent(jButton2))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                            .addComponent(Guaradar)
+                            .addComponent(Moto)))
+                    .addComponent(jLabel7)
+                    .addComponent(panelEspecifico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,25 +217,173 @@ public class Vehiculos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(Auto)
+                    .addComponent(Moto))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addGap(39, 39, 39)
-                .addComponent(jLabel3)
-                .addGap(34, 34, 34)
-                .addComponent(jLabel4)
-                .addGap(37, 37, 37)
-                .addComponent(jLabel5)
-                .addGap(37, 37, 37)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(Patente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(año, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(Marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(Cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelEspecifico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(Guaradar)
                 .addGap(20, 20, 20))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    
+    
+    
+    private void AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AutoActionPerformed
+        mostrarAuto();// TODO add your handling code here:
+    }//GEN-LAST:event_AutoActionPerformed
+private void limpiarCampos() {
+
+    Patente.setText("");
+    Marca.setText("");
+    Modelo.setText("");
+    año.setText("");
+    Cliente.setText("");
+    PuertaClinidrada.setText("");
+
+    tipoVehiculo = "";
+
+    jComboBox1.removeAllItems();
+
+    panelEspecifico.setVisible(false);
+}
+    private void GuaradarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuaradarActionPerformed
+       
+
+    if (tipoVehiculo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Seleccioná Auto o Moto.");
+        return;
+    }
+
+    String patente = Patente.getText().trim();
+    String marca = Marca.getText().trim();
+    String modelo = Modelo.getText().trim();
+    String clienteDni = Cliente.getText().trim();
+
+    if (patente.isEmpty() || marca.isEmpty()
+            || modelo.isEmpty() || año.getText().trim().isEmpty()
+            || clienteDni.isEmpty()) {
+
+        JOptionPane.showMessageDialog(this, "Completá todos los datos.");
+        return;
+    }
+
+    try {
+
+        int anioVehiculo = Integer.parseInt(año.getText().trim());
+
+        ClientesDAO clientesDAO = new ClientesDAO();
+
+        Clientes clienteEncontrado =
+                clientesDAO.buscarPorDni(clienteDni);
+
+        if (clienteEncontrado == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No existe un cliente con ese DNI.");
+            return;
+        }
+
+        VehiculoDAO dao = new VehiculoDAO();
+
+        boolean guardado = false;
+
+        if (tipoVehiculo.equals("AUTO")) {
+
+            int puertas = Integer.parseInt(
+                    PuertaClinidrada.getText().trim()
+            );
+
+            String combustibleSeleccionado =
+                    jComboBox1.getSelectedItem().toString();
+
+            Combustibles combustible =
+                    Combustibles.valueOf(combustibleSeleccionado);
+
+            Autos auto = new Autos();
+
+            auto.setPatente(patente);
+            auto.setMarca(marca);
+            auto.setModelo(modelo);
+            auto.setAnio(anioVehiculo);
+            auto.setCliente(clienteEncontrado);
+            auto.setCantidad_puertas(puertas);
+            auto.setCombustible(combustible);
+
+            guardado = dao.insertar(auto);
+
+        } else if (tipoVehiculo.equals("MOTO")) {
+
+            int cilindrada = Integer.parseInt(
+                    PuertaClinidrada.getText().trim()
+            );
+
+            Motos moto = new Motos();
+
+            moto.setPatente(patente);
+            moto.setMarca(marca);
+            moto.setModelo(modelo);
+            moto.setAnio(anioVehiculo);
+            moto.setCliente(clienteEncontrado);
+            moto.setCilindrada(cilindrada);
+
+            guardado = dao.insertar(moto);
+        }
+
+        if (guardado) {
+            JOptionPane.showMessageDialog(this,
+                    "Vehículo registrado correctamente.");
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No se pudo registrar el vehículo.");
+        }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Ingresá números válidos.");
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this,
+                "El combustible seleccionado no es válido.");
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al guardar: " + e.getMessage());
+    }// TODO add your handling code here:
+    }//GEN-LAST:event_GuaradarActionPerformed
+
+    private void añoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_añoActionPerformed
+
+    private void MotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MotoActionPerformed
+       mostrarMoto(); // TODO add your handling code here:
+    }//GEN-LAST:event_MotoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -135,14 +411,25 @@ public class Vehiculos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton Auto;
+    private javax.swing.JTextField Cliente;
+    private javax.swing.JButton Guaradar;
+    private javax.swing.JTextField Marca;
+    private javax.swing.JTextField Modelo;
+    private javax.swing.JButton Moto;
+    private javax.swing.JTextField Patente;
+    private javax.swing.JTextField PuertaClinidrada;
+    private javax.swing.JTextField año;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel label1;
+    private javax.swing.JLabel label2;
+    private javax.swing.JPanel panelEspecifico;
     // End of variables declaration//GEN-END:variables
 }
