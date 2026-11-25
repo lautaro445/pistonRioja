@@ -3,13 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pistonriojano.vista;
-
+import pistonriojano.dao.ClientesDAO;
+import pistonriojano.modelo.Clientes;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author lautaro
  */
 public class BuscarCliente extends javax.swing.JFrame {
-    
+    private ClientesDAO clientesDAO = new ClientesDAO();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BuscarCliente.class.getName());
 
     /**
@@ -30,10 +33,10 @@ public class BuscarCliente extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        busquedaDni = new javax.swing.JTextField();
+        BusquedaCliente = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        modelo = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,22 +44,23 @@ public class BuscarCliente extends javax.swing.JFrame {
 
         jLabel2.setText("Dni del cliente");
 
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        busquedaDni.addActionListener(this::busquedaDniActionPerformed);
 
-        jButton1.setText("jButton1");
+        BusquedaCliente.setText("Buscar");
+        BusquedaCliente.addActionListener(this::BusquedaClienteActionPerformed);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        modelo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Dni", "Nombre", "Apellido", "Telefono", "Mail"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(modelo);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,16 +70,14 @@ public class BuscarCliente extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(52, 52, 52))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(busquedaDni, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BusquedaCliente))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 25, Short.MAX_VALUE))
         );
@@ -86,10 +88,9 @@ public class BuscarCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(busquedaDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BusquedaCliente))
+                .addGap(36, 36, 36)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -97,9 +98,48 @@ public class BuscarCliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void busquedaDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busquedaDniActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_busquedaDniActionPerformed
+
+    private void BusquedaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BusquedaClienteActionPerformed
+         try {
+        String dni = busquedaDni.getText().trim();
+
+        if (dni.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un DNI válido");
+            return;
+        }
+
+        Clientes cliente = clientesDAO.buscarPorDni(dni);
+
+        if (cliente != null) {
+
+            DefaultTableModel modeloTabla =
+                (DefaultTableModel) modelo.getModel();
+
+            modeloTabla.addRow(new Object[]{
+                cliente.getDni(),
+                cliente.getNombre(),
+                cliente.getApellido(),
+                cliente.getTelefono(),
+                cliente.getEmail()
+            });
+
+            JOptionPane.showMessageDialog(this, "Cliente encontrado");
+
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "No se encontró coincidencia");
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+            "Error al buscar: " + e.getMessage());
+    }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_BusquedaClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -127,11 +167,11 @@ public class BuscarCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton BusquedaCliente;
+    private javax.swing.JTextField busquedaDni;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable modelo;
     // End of variables declaration//GEN-END:variables
 }

@@ -117,7 +117,7 @@ public class MotoDAO {
 
         ClientesDAO clientesDAO = new ClientesDAO();
         moto.setCliente(
-            clientesDAO.buscarPorDni(rs.getInt("clientes_dni"))
+            clientesDAO.buscarPorDni(rs.getString("clientes_dni"))
         );
 
         return moto;

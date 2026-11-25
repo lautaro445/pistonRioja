@@ -3,7 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pistonriojano.vista;
-
+import pistonriojano.dao.ClientesDAO;
+import pistonriojano.modelo.Clientes;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 /**
  *
  * @author lautaro
@@ -31,7 +36,7 @@ public class ListarClientes extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        listar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,14 +55,15 @@ public class ListarClientes extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("Mostrar Clientes");
+        listar.setText("Mostrar Clientes");
+        listar.addActionListener(this::listarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton1)
+                .addComponent(listar)
                 .addGap(84, 84, 84)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -74,13 +80,48 @@ public class ListarClientes extends javax.swing.JFrame {
                         .addGap(0, 12, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(listar)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void listarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listarActionPerformed
+     ClientesDAO dao = new ClientesDAO();
+          try {
+        List<Clientes> clientes = dao.listar();
+
+        DefaultTableModel modelo = new DefaultTableModel();
+
+        modelo.addColumn("DNI");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Apellido");
+        modelo.addColumn("Teléfono");
+        modelo.addColumn("Email");
+
+        for (Clientes cliente : clientes) {
+            modelo.addRow(new Object[]{
+                cliente.getDni(),
+                cliente.getNombre(),
+                cliente.getApellido(),
+                cliente.getTelefono(),
+                cliente.getEmail()
+            });
+        }
+
+        jTable1.setModel(modelo);
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Error al listar los clientes: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE
+        );
+    }                   // TODO add your handling code here:
+    }//GEN-LAST:event_listarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -108,9 +149,9 @@ public class ListarClientes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton listar;
     // End of variables declaration//GEN-END:variables
 }

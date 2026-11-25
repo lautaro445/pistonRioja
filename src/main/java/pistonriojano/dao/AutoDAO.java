@@ -124,7 +124,7 @@ public class AutoDAO {
 
         ClientesDAO clientesDAO = new ClientesDAO();
         auto.setCliente(
-            clientesDAO.buscarPorDni(rs.getInt("clientes_dni"))
+            clientesDAO.buscarPorDni(rs.getString("clientes_dni"))
         );
 
         return auto;

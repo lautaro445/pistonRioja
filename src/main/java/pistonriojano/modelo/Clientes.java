@@ -26,9 +26,9 @@ public class Clientes {
         return dni;
     }
 
-    public String setDni(String dni) {
+    public void  setDni(String dni) {
         this.dni = dni;
-        return null;
+        
     }
 
     public String getNombre() {
@@ -61,5 +61,9 @@ public class Clientes {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setVisible(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

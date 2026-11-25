@@ -4,6 +4,8 @@
  */
 package pistonriojano.vista;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author lautaro
@@ -29,52 +31,78 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        Salir = new javax.swing.JMenu();
+        Clientes = new javax.swing.JButton();
+        Vehiculos = new javax.swing.JButton();
+        Repuestos = new javax.swing.JButton();
+        Ordenes = new javax.swing.JButton();
+        Salir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Taller mecanico");
 
-        jMenu1.setText("Clientes");
-        jMenuBar1.add(jMenu1);
+        Clientes.setText("Clientes");
+        Clientes.addActionListener(this::ClientesActionPerformed);
 
-        jMenu2.setText("Vehiculos");
-        jMenuBar1.add(jMenu2);
+        Vehiculos.setText("Vehiculos");
 
-        jMenu3.setText("Repuestos");
-        jMenuBar1.add(jMenu3);
+        Repuestos.setText("Repuestos");
 
-        jMenu4.setText("Ordenes");
-        jMenuBar1.add(jMenu4);
+        Ordenes.setText("Ordenes");
 
-        Salir.setText("jMenu5");
-        jMenuBar1.add(Salir);
-
-        setJMenuBar(jMenuBar1);
+        Salir.setText("Salir");
+        Salir.addActionListener(this::SalirActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(161, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addGap(152, 152, 152)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(Salir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Ordenes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Repuestos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Vehiculos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Clientes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
                 .addGap(147, 147, 147))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(0, 257, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(Clientes)
+                .addGap(18, 18, 18)
+                .addComponent(Vehiculos)
+                .addGap(18, 18, 18)
+                .addComponent(Repuestos)
+                .addGap(18, 18, 18)
+                .addComponent(Ordenes)
+                .addGap(18, 18, 18)
+                .addComponent(Salir)
+                .addGap(0, 72, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClientesActionPerformed
+           ClientesForm form = new ClientesForm();
+           form.setLocationRelativeTo(null);
+           form.setVisible(true);
+           form.toFront();
+            form.requestFocus();
+            this.dispose();
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_ClientesActionPerformed
+
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -102,12 +130,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu Salir;
+    private javax.swing.JButton Clientes;
+    private javax.swing.JButton Ordenes;
+    private javax.swing.JButton Repuestos;
+    private javax.swing.JButton Salir;
+    private javax.swing.JButton Vehiculos;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
 }

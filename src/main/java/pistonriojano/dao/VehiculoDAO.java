@@ -152,7 +152,7 @@ public class VehiculoDAO {
 
         ClientesDAO clientesDAO = new ClientesDAO();
         vehiculo.setCliente(
-            clientesDAO.buscarPorDni(rs.getInt("clientes_dni"))
+            clientesDAO.buscarPorDni(rs.getString("clientes_dni"))
         );
 
         return vehiculo;

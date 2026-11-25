@@ -28,7 +28,7 @@ public class ClientesDAO {
         }
     }
 
-    public Clientes buscarPorDni(int dni) throws SQLException {
+    public Clientes buscarPorDni(String dni) throws SQLException {
         String sql = """
             SELECT * FROM "PistonRiojano"."Clientes"
             WHERE dni = ?
@@ -37,7 +37,7 @@ public class ClientesDAO {
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, dni);
+            ps.setString(1, dni);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -89,7 +89,7 @@ public class ClientesDAO {
         }
     }
 
-    public boolean eliminar(int dni) throws SQLException {
+    public boolean eliminar(String dni) throws SQLException {
         String sql = """
             DELETE FROM "PistonRiojano"."Clientes"
             WHERE dni = ?
@@ -98,7 +98,7 @@ public class ClientesDAO {
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, dni);
+            ps.setString(1, dni);
             return ps.executeUpdate() > 0;
         }
     }
